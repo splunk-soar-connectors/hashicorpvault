@@ -5,7 +5,7 @@
     "publisher": "Splunk Community",
     "type": "generic",
     "main_module": "hashicorp_vault_connector.py",
-    "app_version": "1.0.1",
+    "app_version": "1.1.0",
     "utctime_updated": "2021-11-10T00:20:20.000000Z",
     "package_name": "phantom_hashicorp_vault",
     "product_vendor": "Dallan",
@@ -16,6 +16,11 @@
     "logo": "logo_hashicorp_vault.svg",
     "logo_dark": "logo_hashicorp_vault_dark.svg",
     "license": "Copyright (c) 2020 Splunk Inc.",
+    "contributors": [
+        {
+            "name": "Alex Baker"
+        }
+    ],
     "pip_dependencies": {
         "wheel": [
             {
@@ -77,10 +82,28 @@
             "order": 2
         },
         "vault_token": {
-            "description": "Token used to authenticate requests to Hashicorp Vault",
+            "description": "Token if using token authentication to Vault",
             "data_type": "password",
             "required": true,
             "order": 3
+        },
+        "vault_namespace": {
+            "description": "Vault Namespace",
+            "data_type": "string",
+            "required": false,
+            "order": 4
+        },
+        "vault_role_id": {
+            "description": "role_id if using AppRole authentication",
+            "data_type": "password",
+            "required": false,
+            "order": 5
+        },
+        "vault_secret_id": {
+            "description": "secret_id if using AppRole authentication",
+            "data_type": "password",
+            "required": false,
+            "order": 6
         }
     },
     "actions": [

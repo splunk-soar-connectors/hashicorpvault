@@ -12,14 +12,16 @@
 # the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
-import phantom.app as phantom
-from phantom.action_result import ActionResult
 import json
 import sys
-import hvac
-from bs4 import UnicodeDammit
-from hashicorp_vault_consts import *
 import urllib.parse
+
+import hvac
+import phantom.app as phantom
+from bs4 import UnicodeDammit
+from phantom.action_result import ActionResult
+
+from hashicorp_vault_consts import *
 
 
 class RetVal(tuple):
@@ -122,24 +124,37 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
         return mountpoint
 
     def _create_vault_client(self, action_result):
-        url = self._get_url()
-        token = self._get_token()
+        config = self.get_config()
 
-        if url and token:
-            try:
-                vault_client = hvac.Client(url=url, token=token)
-                return RetVal(action_result.set_status(phantom.APP_SUCCESS, 'Successfully created Hashicorp Vault Client'), vault_client)
-            except Exception as e:
-                err = self._get_error_message_from_exception(e)
-                err = urllib.parse.unquote(err)
-                return RetVal(
-                    action_result.set_status(
-                        phantom.APP_ERROR,
-                        "Error in getting the Hashicorp Vault Client. {0}".format(err)
-                    ), None
-                )
-        else:
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Error in fetching url and token"), None)
+        url = config['vault_url']
+        namespace = config.get('vault_namespace')
+        token = config.get('vault_token')
+        role_id = config.get('vault_role_id')
+        secret_id = config.get('vault_secret_id')
+        verify = config.get('verify_server_cert', True)
+
+        try:
+            if token:
+                vault_client = hvac.Client(url=url, namespace=namespace, verify=verify, token=token)
+            elif role_id and secret_id:
+                if namespace:
+                    vault_client = hvac.Client(url=url, namespace=namespace, verify=verify)
+                    vault_client.auth.approle.login(role_id=role_id, secret_id=secret_id)
+                else:
+                    raise ValueError("Namespace must be set in the asset configuration when using AppRole authentication")
+            else:
+                raise ValueError("Failure while loading asset configuration. Please check your asset configuration.")
+
+            return RetVal(action_result.set_status(phantom.APP_SUCCESS, "Successfully created Hashicorp Vault Client"), vault_client)
+        except Exception as e:
+            err = self._get_error_message_from_exception(e)
+            err = urllib.parse.unquote(err)
+            return RetVal(
+                action_result.set_status(
+                    phantom.APP_ERROR,
+                    "Error in getting the Hashicorp Vault Client. {0}".format(err)
+                ), None
+            )
 
     def _test_connectivity(self, action_result):
         ret_val, hvac_client = self._create_vault_client(action_result)
