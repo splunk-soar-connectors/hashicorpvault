@@ -1,6 +1,6 @@
 # File: hashicorp_vault_connector.py
 #
-# Copyright (c) 2020 Splunk Inc.
+# Copyright (c) 2020-2021 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ import urllib.parse
 
 import hvac
 import phantom.app as phantom
-from bs4 import UnicodeDammit
 from phantom.action_result import ActionResult
 
 from hashicorp_vault_consts import *
@@ -38,11 +37,12 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
     def initialize(self):
         self._state = self.load_state()
 
-        # Fetching the Python major version
-        try:
-            self._python_version = int(sys.version_info[0])
-        except:
-            return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version.")
+        if not isinstance(self._state, dict):
+            self.debug_print("Resetting the state file with the default format")
+            self._state = {
+                "app_version": self.get_app_json().get('app_version')
+            }
+            return self.set_status(phantom.APP_ERROR, HASHICORP_VAULT_STATE_FILE_CORRUPT_ERR)
 
         return phantom.APP_SUCCESS
 
@@ -51,57 +51,30 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
         self.save_state(self._state)
         return phantom.APP_SUCCESS
 
-    def _handle_py_ver_compat_for_input_str(self, input_str):
-        """
-        This method returns the encoded|original string based on the Python version.
-        :param input_str: Input string to be processed
-        :return: input_str (Processed input string based on following logic 'input_str - Python 3; encoded input_str - Python 2')
-        """
-
-        try:
-            if input_str and self._python_version == 2:
-                input_str = UnicodeDammit(input_str).unicode_markup.encode('utf-8')
-        except:
-            self.debug_print("Error occurred while handling python 2to3 compatibility for the input string")
-
-        return input_str
-
     def _get_error_message_from_exception(self, e):
-        """ This method is used to get appropriate error message from the exception.
+        """
+        Get appropriate error message from the exception.
         :param e: Exception object
         :return: error message
         """
 
+        error_code = None
+        error_msg = ERR_MSG_UNAVAILABLE
+
         try:
-            if e.args:
+            if hasattr(e, "args"):
                 if len(e.args) > 1:
                     error_code = e.args[0]
                     error_msg = e.args[1]
                 elif len(e.args) == 1:
-                    error_code = ERR_CODE_MSG
                     error_msg = e.args[0]
-            else:
-                error_code = ERR_CODE_MSG
-                error_msg = ERR_MSG_UNAVAILABLE
         except:
-            error_code = ERR_CODE_MSG
-            error_msg = ERR_MSG_UNAVAILABLE
+            pass
 
-        try:
-            error_msg = self._handle_py_ver_compat_for_input_str(error_msg)
-        except TypeError:
-            error_msg = TYPE_ERR_MSG
-        except:
-            error_msg = ERR_MSG_UNAVAILABLE
-
-        try:
-            if error_code in ERR_CODE_MSG:
-                error_text = "Error Message: {0}".format(error_msg)
-            else:
-                error_text = "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
-        except:
-            self.debug_print("Error occurred while parsing error message")
-            error_text = PARSE_ERR_MSG
+        if not error_code:
+            error_text = "Error Message: {}".format(error_msg)
+        else:
+            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_msg)
 
         return error_text
 
@@ -227,7 +200,8 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
                         return action_result.set_status(phantom.APP_SUCCESS, 'Successfully retrieved secret value')
                     else:
                         self.save_progress("No secret value retrieved from Hashicorp Vault for the specified path")
-                        return action_result.set_status(phantom.APP_ERROR, "No secret value retrieved from Hashicorp Vault for the specified path")
+                        return action_result.set_status(phantom.APP_ERROR,
+                            "No secret value retrieved from Hashicorp Vault for the specified path")
                 except Exception as e:
                     err = self._get_error_message_from_exception(e)
                     return action_result.set_status(phantom.APP_ERROR, "Error in getting secret value from the API response. {}".format(err))
@@ -296,7 +270,7 @@ if __name__ == '__main__':
     pudb.set_trace()
     if len(sys.argv) < 2:
         print('No test json specified as input')
-        exit(0)
+        sys.exit(0)
     with open(sys.argv[1]) as (f):
         in_json = f.read()
         in_json = json.loads(in_json)
@@ -305,4 +279,4 @@ if __name__ == '__main__':
         connector.print_progress_message = True
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
-    exit(0)
+    sys.exit(0)
