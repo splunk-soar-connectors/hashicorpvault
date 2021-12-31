@@ -13,6 +13,7 @@
 # either express or implied. See the License for the specific language governing permissions
 # and limitations under the License.
 import json
+import os
 import sys
 import urllib.parse
 
@@ -43,6 +44,19 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
                 "app_version": self.get_app_json().get('app_version')
             }
             return self.set_status(phantom.APP_ERROR, HASHICORP_VAULT_STATE_FILE_CORRUPT_ERR)
+
+        config = self.get_config()
+        self._proxies = {}
+        env_vars = config.get('_reserved_environment_variables', {})
+        if 'HTTP_PROXY' in env_vars:
+            self._proxies['http'] = env_vars['HTTP_PROXY']['value']
+        elif 'HTTP_PROXY' in os.environ:
+            self._proxies['http'] = os.environ.get('HTTP_PROXY')
+
+        if 'HTTPS_PROXY' in env_vars:
+            self._proxies['https'] = env_vars['HTTPS_PROXY']['value']
+        elif 'HTTPS_PROXY' in os.environ:
+            self._proxies['https'] = os.environ.get('HTTPS_PROXY')
 
         return phantom.APP_SUCCESS
 
@@ -78,18 +92,6 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
 
         return error_text
 
-    def _get_token(self):
-        self.save_progress('Getting token from asset configuration..._get_token()')
-        config = self.get_config()
-        token = config['vault_token']
-        return token
-
-    def _get_url(self):
-        self.save_progress('Getting vault URL from asset configuration..._get_url()')
-        config = self.get_config()
-        url = config['vault_url']
-        return url
-
     def _get_mountpoint(self):
         self.save_progress('Getting vault mountpoint from asset configuration..._get_mountpoint()')
         config = self.get_config()
@@ -108,10 +110,10 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
 
         try:
             if token:
-                vault_client = hvac.Client(url=url, namespace=namespace, verify=verify, token=token)
+                vault_client = hvac.Client(url=url, namespace=namespace, verify=verify, token=token, proxies=self._proxies)
             elif role_id and secret_id:
                 if namespace:
-                    vault_client = hvac.Client(url=url, namespace=namespace, verify=verify)
+                    vault_client = hvac.Client(url=url, namespace=namespace, verify=verify, proxies=self._proxies)
                     vault_client.auth.approle.login(role_id=role_id, secret_id=secret_id)
                 else:
                     raise ValueError("Namespace must be set in the asset configuration when using AppRole authentication")

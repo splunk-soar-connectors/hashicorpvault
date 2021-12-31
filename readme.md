@@ -13,17 +13,6 @@
 [comment]: # "  either express or implied. See the License for the specific language governing permissions"
 [comment]: # "  and limitations under the License."
 [comment]: # ""
-## Licensing details for the app
-
-### hvac
-
-This app uses the hvac module, which is licensed under the Apache Software License, Copyright (c)
-Ian Unruh, Jeffrey Hogan.
-
-### six
-
-This app uses the six module, which is licensed under the MIT License (MIT), Copyright (c) Benjamin
-Peterson.
 
 **Port Information**
 *  The app uses HTTP/ HTTPS protocol for communicating with the Hashicorp Vault server. Below are the default ports used by the Splunk SOAR Connector.

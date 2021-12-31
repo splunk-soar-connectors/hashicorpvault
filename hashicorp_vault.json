@@ -85,12 +85,12 @@
             "order": 4
         },
         "vault_role_id": {
-            "description": "role_id if using AppRole authentication",
+            "description": "Role ID if using AppRole authentication",
             "data_type": "password",
             "order": 5
         },
         "vault_secret_id": {
-            "description": "secret_id if using AppRole authentication",
+            "description": "Secret ID if using AppRole authentication",
             "data_type": "password",
             "order": 6
         }
