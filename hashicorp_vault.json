@@ -16,7 +16,7 @@
     "min_phantom_version": "5.0.0",
     "logo": "logo_hashicorp_vault.svg",
     "logo_dark": "logo_hashicorp_vault_dark.svg",
-    "license": "Copyright (c) 2020-2021 Splunk Inc.",
+    "license": "Copyright (c) 2020-2022 Splunk Inc.",
     "contributors": [
         {
             "name": "Alex Baker"
@@ -30,7 +30,7 @@
             },
             {
                 "module": "charset_normalizer",
-                "input_file": "wheels/charset_normalizer-2.0.9-py3-none-any.whl"
+                "input_file": "wheels/charset_normalizer-2.0.7-py3-none-any.whl"
             },
             {
                 "module": "hvac",
