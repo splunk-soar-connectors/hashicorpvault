@@ -12,7 +12,6 @@
     "product_name": "Hashicorp Vault",
     "product_version_regex": ".*",
     "python_version": "3",
-    "fips_compliant": true,
     "min_phantom_version": "5.0.0",
     "logo": "logo_hashicorp_vault.svg",
     "logo_dark": "logo_hashicorp_vault_dark.svg",
