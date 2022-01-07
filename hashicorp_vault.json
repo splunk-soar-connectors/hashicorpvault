@@ -74,7 +74,7 @@
             "order": 2
         },
         "vault_token": {
-            "description": "Token if using token authentication to Vault",
+            "description": "Token used to authenticate requests to Hashicorp Vault when using token authentication",
             "data_type": "password",
             "required": true,
             "order": 3
