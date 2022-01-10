@@ -6,7 +6,7 @@
     "type": "generic",
     "main_module": "hashicorp_vault_connector.py",
     "app_version": "1.1.0",
-    "utctime_updated": "2021-11-10T00:20:20.000000Z",
+    "utctime_updated": "2022-01-07T20:34:30.000000Z",
     "package_name": "phantom_hashicorp_vault",
     "product_vendor": "Dallan",
     "product_name": "Hashicorp Vault",
