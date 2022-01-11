@@ -1,0 +1,9 @@
+Splunk SOAR Hashicorp Vault
+Copyright (c) 2020-2022 Splunk Inc.
+
+Third-party Software Attributions:
+
+Library: hvac
+Version: 0.10.1
+License: Apache 2.0
+Unknown copyright
