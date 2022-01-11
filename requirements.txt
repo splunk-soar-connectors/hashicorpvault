@@ -1,2 +1,1 @@
-beautifulsoup4==4.9.1
 hvac==0.10.1
