@@ -2,11 +2,11 @@
 # Hashicorp Vault
 
 Publisher: Splunk Community  
-Connector Version: 1\.1\.1  
+Connector Version: 1.1.2  
 Product Vendor: Dallan  
 Product Name: Hashicorp Vault  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.0\.0  
+Product Version Supported (regex): ".\*"  
+Minimum Product Version: 5.0.0  
 
 This is an app that supports various interactions with the Hashicorp Vault REST API
 
@@ -38,13 +38,13 @@ The below configuration variables are required for this Connector to operate.  T
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**verify\_server\_cert** |  optional  | boolean | Verify server certificate
-**vault\_url** |  required  | string | URL of the Hashicorp Vault instance
-**vault\_mountpoint** |  required  | string | Vault mountpoint to connect with
-**vault\_token** |  required  | password | Token used to authenticate requests to Hashicorp Vault when using token authentication
-**vault\_namespace** |  optional  | string | Vault Namespace
-**vault\_role\_id** |  optional  | password | Role ID if using AppRole authentication
-**vault\_secret\_id** |  optional  | password | Secret ID if using AppRole authentication
+**verify_server_cert** |  optional  | boolean | Verify server certificate
+**vault_url** |  required  | string | URL of the Hashicorp Vault instance
+**vault_mountpoint** |  required  | string | Vault mountpoint to connect with
+**vault_token** |  required  | password | Token used to authenticate requests to Hashicorp Vault when using token authentication
+**vault_namespace** |  optional  | string | Vault Namespace
+**vault_role_id** |  optional  | password | Role ID if using AppRole authentication
+**vault_secret_id** |  optional  | password | Secret ID if using AppRole authentication
 
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied credentials  
@@ -75,20 +75,20 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **location** |  required  | Location to keep the secret value | string |  `hashicorp vault location` 
 **update** |  optional  | Update secret value if already exists | boolean | 
-**secret\_json** |  required  | JSON formatted object of dictionary to store at the given location | string | 
+**secret_json** |  required  | JSON formatted object of dictionary to store at the given location | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.location | string |  `hashicorp vault location` 
-action\_result\.parameter\.secret\_json | string | 
-action\_result\.parameter\.update | boolean | 
-action\_result\.data\.\*\.succeeded | boolean | 
-action\_result\.status | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.location | string |  `hashicorp vault location`  |  
+action_result.parameter.secret_json | string |  |  
+action_result.parameter.update | boolean |  |   True  False 
+action_result.data.\*.succeeded | boolean |  |   True  False 
+action_result.status | string |  |   success  failed 
+action_result.summary | string |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get secret'
 Get secret value present at the specified path
@@ -102,16 +102,16 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **location** |  required  | Location of the secret value | string |  `hashicorp vault location` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.location | string |  `hashicorp vault location` 
-action\_result\.data\.\*\.secret\_value | string | 
-action\_result\.data\.\*\.succeeded | boolean | 
-action\_result\.status | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.location | string |  `hashicorp vault location`  |  
+action_result.data.\*.secret_value | string |  |  
+action_result.data.\*.succeeded | boolean |  |   True  False 
+action_result.status | string |  |   success  failed 
+action_result.summary | string |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list secrets'
 List secret values present at the specified path
@@ -125,13 +125,13 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **location** |  required  | Location of the secret values | string |  `hashicorp vault location` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.parameter\.location | string |  `hashicorp vault location` 
-action\_result\.data\.\*\.secret\_values | string | 
-action\_result\.data\.\*\.succeeded | boolean | 
-action\_result\.status | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.parameter.location | string |  `hashicorp vault location`  |  
+action_result.data.\*.secret_values | string |  |  
+action_result.data.\*.succeeded | boolean |  |   True  False 
+action_result.status | string |  |   success  failed 
+action_result.summary | string |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1 

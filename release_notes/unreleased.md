@@ -1,2 +1,1 @@
 **Unreleased**
-* Removed unnecessary debug logging [PAPP-34118]
