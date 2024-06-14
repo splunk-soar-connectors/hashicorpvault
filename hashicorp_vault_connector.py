@@ -154,7 +154,6 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
         mountpoint = self._get_mountpoint()
         path = param.get('location')
         secret = param.get('secret_json')
-        self.save_progress(secret)
         try:
             secret = json.loads(secret)
             try:
