@@ -1,6 +1,6 @@
 # File: hashicorp_vault_consts.py
 #
-# Copyright (c) 2020-2022 Splunk Inc.
+# Copyright (c) 2020-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
 #
 #
 # Action Identifier constants
-ACTION_ID_TEST_ASSET_CONNECTIVITY = 'test_asset_connectivity'
-ACTION_ID_SET_SECRET = 'set_secret'
-ACTION_ID_GET_SECRET = 'get_secret'
-ACTION_ID_LIST_SECRETS = 'list_secrets'
+ACTION_ID_TEST_ASSET_CONNECTIVITY = "test_asset_connectivity"
+ACTION_ID_SET_SECRET = "set_secret"
+ACTION_ID_GET_SECRET = "get_secret"
+ACTION_ID_LIST_SECRETS = "list_secrets"
 HASHICORP_VAULT_STATE_FILE_CORRUPT_ERR = "Error occurred while loading the state file due to its unexpected format.\
      Resetting the state file with the default format. Please try again."
 
