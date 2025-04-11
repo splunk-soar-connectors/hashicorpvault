@@ -21,38 +21,6 @@
             "name": "Alex Baker"
         }
     ],
-    "pip_dependencies": {
-        "wheel": [
-            {
-                "module": "certifi",
-                "input_file": "wheels/certifi-2021.10.8-py2.py3-none-any.whl"
-            },
-            {
-                "module": "charset_normalizer",
-                "input_file": "wheels/charset_normalizer-2.0.7-py3-none-any.whl"
-            },
-            {
-                "module": "hvac",
-                "input_file": "wheels/hvac-0.10.1-py2.py3-none-any.whl"
-            },
-            {
-                "module": "idna",
-                "input_file": "wheels/idna-3.3-py3-none-any.whl"
-            },
-            {
-                "module": "requests",
-                "input_file": "wheels/requests-2.26.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "urllib3",
-                "input_file": "wheels/urllib3-1.26.7-py2.py3-none-any.whl"
-            }
-        ]
-    },
     "configuration": {
         "verify_server_cert": {
             "description": "Verify server certificate",
@@ -359,5 +327,13 @@
             },
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip39_dependencies": {
+        "wheel": [
+            {
+                "module": "hvac",
+                "input_file": "wheels/shared/hvac-0.10.1-py2.py3-none-any.whl"
+            }
+        ]
+    }
 }
