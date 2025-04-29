@@ -1,7 +1,7 @@
 # Hashicorp Vault
 
 Publisher: Splunk Community \
-Connector Version: 1.1.2 \
+Connector Version: 1.1.3 \
 Product Vendor: Dallan \
 Product Name: Hashicorp Vault \
 Minimum Product Version: 5.0.0
