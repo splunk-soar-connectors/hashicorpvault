@@ -4,7 +4,7 @@ Publisher: Splunk Community <br>
 Connector Version: 1.1.4 <br>
 Product Vendor: Dallan <br>
 Product Name: Hashicorp Vault <br>
-Minimum Product Version: 5.0.0
+Minimum Product Version: 7.0.0
 
 This is an app that supports various interactions with the Hashicorp Vault REST API
 
