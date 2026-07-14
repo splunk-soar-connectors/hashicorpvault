@@ -1,12 +1,33 @@
 # Hashicorp Vault
 
-Publisher: Splunk Community \
-Connector Version: 1.1.3 \
-Product Vendor: Dallan \
-Product Name: Hashicorp Vault \
+Publisher: Splunk Community <br>
+Connector Version: 1.1.4 <br>
+Product Vendor: Dallan <br>
+Product Name: Hashicorp Vault <br>
 Minimum Product Version: 5.0.0
 
 This is an app that supports various interactions with the Hashicorp Vault REST API
+
+## Authentication
+
+The app supports two authentication methods. When configuring the asset, you may provide either AppRole credentials or a Vault token. If both are provided, **AppRole takes priority** as it is considered more secure.
+
+### AppRole Authentication (Recommended)
+
+Provide both **Role ID** (`vault_role_id`) and **Secret ID** (`vault_secret_id`) in the asset configuration. Both fields must be set together — providing only one will result in an error. A Vault namespace (`vault_namespace`) may optionally be specified for HCP Vault or enterprise deployments.
+
+### Token Authentication
+
+Provide a **Vault token** (`vault_token`) in the asset configuration. This method is used only when AppRole credentials are not configured. Token authentication is considered less secure than AppRole because tokens do not rotate automatically.
+
+### Priority
+
+| AppRole credentials set | Token set | Method used |
+|-------------------------|-----------|----------------|
+| Yes | Yes | AppRole |
+| Yes | No | AppRole |
+| No | Yes | Token |
+| No | No | Error — no valid credentials |
 
 ## Port Information
 
@@ -27,23 +48,23 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **verify_server_cert** | optional | boolean | Verify server certificate |
 **vault_url** | required | string | URL of the Hashicorp Vault instance |
 **vault_mountpoint** | required | string | Vault mountpoint to connect with |
-**vault_token** | required | password | Token used to authenticate requests to Hashicorp Vault when using token authentication |
-**vault_namespace** | optional | string | Vault Namespace |
-**vault_role_id** | optional | password | Role ID if using AppRole authentication |
-**vault_secret_id** | optional | password | Secret ID if using AppRole authentication |
+**vault_role_id** | optional | password | Role ID for AppRole authentication (preferred over token when both are provided) |
+**vault_secret_id** | optional | password | Secret ID for AppRole authentication (required when Role ID is set) |
+**vault_token** | optional | password | Token for token-based authentication (used only when AppRole credentials are not provided) |
+**vault_namespace** | optional | string | Vault Namespace (optional; required only for HCP Vault or specific enterprise setups) |
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied credentials \
-[set secret](#action-set-secret) - Set secret value at the specified path \
-[get secret](#action-get-secret) - Get secret value present at the specified path \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied credentials <br>
+[set secret](#action-set-secret) - Set secret value at the specified path <br>
+[get secret](#action-get-secret) - Get secret value present at the specified path <br>
 [list secrets](#action-list-secrets) - List secret values present at the specified path
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied credentials
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -58,7 +79,7 @@ No Output
 
 Set secret value at the specified path
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -87,7 +108,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get secret value present at the specified path
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -113,7 +134,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List secret values present at the specified path
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -139,7 +160,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

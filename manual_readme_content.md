@@ -12,12 +12,12 @@ Provide a **Vault token** (`vault_token`) in the asset configuration. This metho
 
 ### Priority
 
-| AppRole credentials set | Token set | Method used    |
+| AppRole credentials set | Token set | Method used |
 |-------------------------|-----------|----------------|
-| Yes                     | Yes       | AppRole        |
-| Yes                     | No        | AppRole        |
-| No                      | Yes       | Token          |
-| No                      | No        | Error — no valid credentials |
+| Yes | Yes | AppRole |
+| Yes | No | AppRole |
+| No | Yes | Token |
+| No | No | Error — no valid credentials |
 
 ## Port Information
 

@@ -1,10 +1,10 @@
 Splunk SOAR App: Hashicorp Vault
-Copyright (c) 2020-2025 Splunk Inc.
+Copyright (c) 2020-2026 Splunk Inc.
 Third Party Software Attributions:
 
 @@@@============================================================================
 
-Library: hvac - 0.10.1
+Library: hvac - 2.4.0
 Homepage: https://github.com/hvac/hvac
 License: Apache Software License
 License Text:
