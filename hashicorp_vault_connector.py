@@ -1,6 +1,6 @@
 # File: hashicorp_vault_connector.py
 #
-# Copyright (c) 2020-2025 Splunk Inc.
+# Copyright (c) 2020-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -100,16 +100,23 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
         verify = config.get("verify_server_cert", True)
 
         try:
-            if token:
-                vault_client = hvac.Client(url=url, namespace=namespace, verify=verify, token=token, proxies=self._proxies)
-            elif role_id and secret_id:
+            # Validate that AppRole credentials are not partially filled
+            if bool(role_id) ^ bool(secret_id):
+                raise ValueError(HASHICORP_VAULT_INCOMPLETE_APPROLE_ERR)
+
+            if role_id and secret_id:
+                # AppRole takes priority over token — it is considered more secure
+                self.save_progress(HASHICORP_VAULT_USING_APPROLE_AUTH)
+                client_kwargs = dict(url=url, verify=verify, proxies=self._proxies)
                 if namespace:
-                    vault_client = hvac.Client(url=url, namespace=namespace, verify=verify, proxies=self._proxies)
-                    vault_client.auth.approle.login(role_id=role_id, secret_id=secret_id)
-                else:
-                    raise ValueError("Namespace must be set in the asset configuration when using AppRole authentication")
+                    client_kwargs["namespace"] = namespace
+                vault_client = hvac.Client(**client_kwargs)
+                vault_client.auth.approle.login(role_id=role_id, secret_id=secret_id)
+            elif token:
+                self.save_progress(HASHICORP_VAULT_USING_TOKEN_AUTH)
+                vault_client = hvac.Client(url=url, namespace=namespace, verify=verify, token=token, proxies=self._proxies)
             else:
-                raise ValueError("Failure while loading asset configuration. Please check your asset configuration.")
+                raise ValueError(HASHICORP_VAULT_NO_AUTH_CREDENTIALS_ERR)
 
             return RetVal(action_result.set_status(phantom.APP_SUCCESS, "Successfully created Hashicorp Vault Client"), vault_client)
         except Exception as e:

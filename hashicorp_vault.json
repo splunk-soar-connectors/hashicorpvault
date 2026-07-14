@@ -5,17 +5,17 @@
     "publisher": "Splunk Community",
     "type": "generic",
     "main_module": "hashicorp_vault_connector.py",
-    "app_version": "1.1.3",
+    "app_version": "1.1.4",
     "utctime_updated": "2025-04-29T13:57:14.803444Z",
     "package_name": "phantom_hashicorp_vault",
     "product_vendor": "Dallan",
     "product_name": "Hashicorp Vault",
     "product_version_regex": ".*",
     "python_version": "3",
-    "min_phantom_version": "5.0.0",
+    "min_phantom_version": "7.0.0",
     "logo": "logo_hashicorp_vault.svg",
     "logo_dark": "logo_hashicorp_vault_dark.svg",
-    "license": "Copyright (c) 2020-2025 Splunk Inc.",
+    "license": "Copyright (c) 2020-2026 Splunk Inc.",
     "contributors": [
         {
             "name": "Alex Baker"
@@ -40,25 +40,24 @@
             "required": true,
             "order": 2
         },
-        "vault_token": {
-            "description": "Token used to authenticate requests to Hashicorp Vault when using token authentication",
+        "vault_role_id": {
+            "description": "Role ID for AppRole authentication (preferred over token when both are provided)",
             "data_type": "password",
-            "required": true,
             "order": 3
         },
-        "vault_namespace": {
-            "description": "Vault Namespace",
-            "data_type": "string",
+        "vault_secret_id": {
+            "description": "Secret ID for AppRole authentication (required when Role ID is set)",
+            "data_type": "password",
             "order": 4
         },
-        "vault_role_id": {
-            "description": "Role ID if using AppRole authentication",
+        "vault_token": {
+            "description": "Token for token-based authentication (used only when AppRole credentials are not provided)",
             "data_type": "password",
             "order": 5
         },
-        "vault_secret_id": {
-            "description": "Secret ID if using AppRole authentication",
-            "data_type": "password",
+        "vault_namespace": {
+            "description": "Vault Namespace (optional; required only for HCP Vault or specific enterprise setups)",
+            "data_type": "string",
             "order": 6
         }
     },
@@ -328,11 +327,19 @@
             "versions": "EQ(*)"
         }
     ],
+    "pip313_dependencies": {
+        "wheel": [
+            {
+                "module": "hvac",
+                "input_file": "wheels/py3/hvac-2.4.0-py3-none-any.whl"
+            }
+        ]
+    },
     "pip39_dependencies": {
         "wheel": [
             {
                 "module": "hvac",
-                "input_file": "wheels/shared/hvac-0.10.1-py2.py3-none-any.whl"
+                "input_file": "wheels/py3/hvac-2.4.0-py3-none-any.whl"
             }
         ]
     }
