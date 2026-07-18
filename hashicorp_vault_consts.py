@@ -33,3 +33,4 @@ HASHICORP_VAULT_NO_AUTH_CREDENTIALS_ERR = (
     "Please provide either AppRole credentials (Role ID + Secret ID) or a Vault token in the asset configuration."
 )
 HASHICORP_VAULT_INCOMPLETE_APPROLE_ERR = "Incomplete AppRole credentials: both 'vault_role_id' and 'vault_secret_id' must be provided together."
+HASHICORP_VAULT_UNSAFE_LOCATION_ERR = "The location must not contain parent-directory ('..') path segments."

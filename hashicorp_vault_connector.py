@@ -89,6 +89,13 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
         mountpoint = config["vault_mountpoint"]
         return mountpoint
 
+    def _get_validated_location(self, param, action_result):
+        path = param.get("location")
+        if not isinstance(path, str) or ".." in path.split("/"):
+            return RetVal(action_result.set_status(phantom.APP_ERROR, HASHICORP_VAULT_UNSAFE_LOCATION_ERR), None)
+
+        return RetVal(phantom.APP_SUCCESS, path)
+
     def _create_vault_client(self, action_result):
         config = self.get_config()
 
@@ -146,12 +153,15 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Failed to create Hashicorp Vault client")
 
     def _set_secret(self, param, action_result):
+        ret_val, path = self._get_validated_location(param, action_result)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
         ret_val, hvac_client = self._create_vault_client(action_result)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
         mountpoint = self._get_mountpoint()
-        path = param.get("location")
         secret = param.get("secret_json")
         try:
             secret = json.loads(secret)
@@ -175,11 +185,14 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, f"Please verify 'secret_json' action parameter. {err}")
 
     def _get_secret(self, param, action_result):
+        ret_val, path = self._get_validated_location(param, action_result)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
         ret_val, hvac_client = self._create_vault_client(action_result)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
         mountpoint = self._get_mountpoint()
-        path = param.get("location")
         try:
             read_response = hvac_client.secrets.kv.v2.read_secret_version(mount_point=mountpoint, path=path)
             if read_response:
@@ -206,11 +219,14 @@ class AppConnectorHashicorpVault(phantom.BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, f"Error in retrieving secret value from Hashicorp Vault. {err}")
 
     def _list_secrets(self, param, action_result):
+        ret_val, path = self._get_validated_location(param, action_result)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
         ret_val, hvac_client = self._create_vault_client(action_result)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
         mountpoint = self._get_mountpoint()
-        path = param.get("location")
         try:
             list_secrets = hvac_client.secrets.kv.v2.list_secrets(mount_point=mountpoint, path=path)
             if list_secrets:
