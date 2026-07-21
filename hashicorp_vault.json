@@ -11,7 +11,7 @@
     "product_vendor": "Dallan",
     "product_name": "Hashicorp Vault",
     "product_version_regex": ".*",
-    "python_version": "3",
+    "python_version": "3.9, 3.13",
     "min_phantom_version": "7.0.0",
     "logo": "logo_hashicorp_vault.svg",
     "logo_dark": "logo_hashicorp_vault_dark.svg",
@@ -25,7 +25,7 @@
         "verify_server_cert": {
             "description": "Verify server certificate",
             "data_type": "boolean",
-            "default": false,
+            "default": true,
             "order": 0
         },
         "vault_url": {
